@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Node Mongo CRUD</title>
+</head>
+<body>
+
+<h2>Create User</h2>
+
+<input id="name" placeholder="Name">
+<button onclick="createUser()">Save</button>
+
+<h2>Users</h2>
+
+<button onclick="loadUsers()">Load Users</button>
+
+<ul id="users"></ul>
+
+<script>
+
+async function createUser(){
+
+    const name = document.getElementById("name").value;
+
+    await fetch("/users",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify({name})
+    });
+
+    loadUsers();
+}
+
+async function loadUsers(){
+
+    const res = await fetch("/users");
+
+    const users = await res.json();
+
+    const list = document.getElementById("users");
+
+    list.innerHTML = "";
+
+    users.forEach(u=>{
+        const li = document.createElement("li");
+        li.innerText = u.name;
+        list.appendChild(li);
+    });
+
+}
+
+</script>
+
+</body>
+</html>
